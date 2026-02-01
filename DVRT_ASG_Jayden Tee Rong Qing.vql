@@ -1,0 +1,559 @@
+﻿# Generated with Denodo Platform 9.3.3.
+
+
+# 0 ====================================================================
+
+# #######################################
+# DATABASE
+# #######################################
+CREATE OR REPLACE DATABASE dvrt_asg_jaydentee 'dvrt assignment';
+
+CONNECT DATABASE dvrt_asg_jaydentee;
+
+# #######################################
+# FOLDERS
+# #######################################
+CREATE OR REPLACE FOLDER '/01_connectivity' ;
+
+CREATE OR REPLACE FOLDER '/02_base_views' ;
+
+CREATE OR REPLACE FOLDER '/03_integrated_view' ;
+
+CREATE OR REPLACE FOLDER '/04_finalize_view' ;
+
+CREATE OR REPLACE FOLDER '/05_web_services' ;
+
+# #######################################
+# RESOURCES
+# #######################################
+# No vault resources
+# #######################################
+# LISTENERS JMS
+# #######################################
+# No listeners jms
+# #######################################
+# LISTENERS KAFKA
+# #######################################
+# No listeners kafka
+# #######################################
+# DATASOURCES
+# #######################################
+CREATE OR REPLACE DATASOURCE DF ds_brands
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/brands.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_categories
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/categories.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_customers
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/customers.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_order_items
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/order_items.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_orders
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/orders.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_products
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/products.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_staffs
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/staffs.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_stocks
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/stocks.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+CREATE OR REPLACE DATASOURCE DF ds_stores
+    FOLDER = '/01_connectivity'
+    ROUTE LOCAL 'LocalConnection' '/opt/denodo/work/lab-files/ASG Data Sources/stores.csv' FILENAMEPATTERN = ''
+    CHARSET = 'UTF-8'
+    COLUMNDELIMITER = ','
+    ENDOFLINEDELIMITER = '\n'
+    HEADER = TRUE;
+
+# #######################################
+# DATABASE CONFIGURATION
+# #######################################
+ALTER DATABASE dvrt_asg_jaydentee
+  CHARSET DEFAULT;
+
+# #######################################
+# WRAPPERS
+# #######################################
+CREATE OR REPLACE WRAPPER DF ds_brands
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_brands
+    OUTPUTSCHEMA (
+        brand_id = 'brand_id',
+        brand_name = 'brand_name'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_categories
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_categories
+    OUTPUTSCHEMA (
+        category_id = 'category_id',
+        category_name = 'category_name'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_customers
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_customers
+    OUTPUTSCHEMA (
+        customer_id = 'customer_id',
+        first_name = 'first_name',
+        last_name = 'last_name',
+        phone = 'phone',
+        email = 'email',
+        street = 'street',
+        city = 'city',
+        state = 'state',
+        zip_code = 'zip_code'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_order_items
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_order_items
+    OUTPUTSCHEMA (
+        order_id = 'order_id',
+        item_id = 'item_id',
+        product_id = 'product_id',
+        quantity = 'quantity',
+        list_price = 'list_price',
+        discount = 'discount'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_orders
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_orders
+    OUTPUTSCHEMA (
+        order_id = 'order_id',
+        customer_id = 'customer_id',
+        order_status = 'order_status',
+        order_date = 'order_date',
+        required_date = 'required_date',
+        shipped_date = 'shipped_date',
+        store_id = 'store_id',
+        staff_id = 'staff_id'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_products
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_products
+    OUTPUTSCHEMA (
+        product_id = 'product_id',
+        product_name = 'product_name',
+        brand_id = 'brand_id',
+        category_id = 'category_id',
+        model_year = 'model_year',
+        list_price = 'list_price'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_staffs
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_staffs
+    OUTPUTSCHEMA (
+        staff_id = 'staff_id',
+        first_name = 'first_name',
+        last_name = 'last_name',
+        email = 'email',
+        phone = 'phone',
+        active = 'active',
+        store_id = 'store_id',
+        manager_id = 'manager_id'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_stocks
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_stocks
+    OUTPUTSCHEMA (
+        store_id = 'store_id',
+        product_id = 'product_id',
+        quantity = 'quantity'
+    );
+
+CREATE OR REPLACE WRAPPER DF ds_stores
+    FOLDER = '/02_base_views'
+    DATASOURCENAME=ds_stores
+    OUTPUTSCHEMA (
+        store_id = 'store_id',
+        store_name = 'store_name',
+        phone = 'phone',
+        email = 'email',
+        street = 'street',
+        city = 'city',
+        state = 'state',
+        zip_code = 'zip_code'
+    );
+
+# #######################################
+# STORED PROCEDURES
+# #######################################
+# No stored procedures
+# #######################################
+# TYPES
+# #######################################
+# No types
+# #######################################
+# MAPS
+# #######################################
+# No maps
+# #######################################
+# BASE VIEWS
+# #######################################
+CREATE OR REPLACE TABLE bv_brands I18N us_pst (
+        brand_id:int,
+        brand_name:text
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_brands(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD brand_id NOS ZERO ()
+             ADD brand_name NOS ZERO ()
+        )
+        OUTPUTLIST (brand_id, brand_name
+        )
+        WRAPPER (df ds_brands)
+    );
+
+CREATE OR REPLACE TABLE bv_categories I18N us_pst (
+        category_id:int,
+        category_name:text
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_categories(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD category_id NOS ZERO ()
+             ADD category_name NOS ZERO ()
+        )
+        OUTPUTLIST (category_id, category_name
+        )
+        WRAPPER (df ds_categories)
+    );
+
+CREATE OR REPLACE TABLE bv_customers I18N us_pst (
+        customer_id:int,
+        first_name:text,
+        last_name:text,
+        phone:text,
+        email:text,
+        street:text,
+        city:text,
+        state:text,
+        zip_code:text
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_customers(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD customer_id NOS ZERO ()
+             ADD first_name NOS ZERO ()
+             ADD last_name NOS ZERO ()
+             ADD phone NOS ZERO ()
+             ADD email NOS ZERO ()
+             ADD street NOS ZERO ()
+             ADD city NOS ZERO ()
+             ADD state NOS ZERO ()
+             ADD zip_code NOS ZERO ()
+        )
+        OUTPUTLIST (city, customer_id, email, first_name, last_name, phone, state, street, zip_code
+        )
+        WRAPPER (df ds_customers)
+    );
+
+CREATE OR REPLACE TABLE bv_order_items I18N us_pst (
+        order_id:int,
+        item_id:int,
+        product_id:int,
+        quantity:int,
+        list_price:double,
+        discount:double
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_order_items(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD order_id NOS ZERO ()
+             ADD item_id NOS ZERO ()
+             ADD product_id NOS ZERO ()
+             ADD quantity NOS ZERO ()
+             ADD list_price NOS ZERO ()
+             ADD discount NOS ZERO ()
+        )
+        OUTPUTLIST (discount, item_id, list_price, order_id, product_id, quantity
+        )
+        WRAPPER (df ds_order_items)
+    );
+
+CREATE OR REPLACE TABLE bv_orders I18N us_pst (
+        order_id:int,
+        customer_id:int,
+        order_status:text,
+        order_date:localdate,
+        required_date:localdate,
+        shipped_date:localdate,
+        store_id:int,
+        staff_id:int
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_orders(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD order_id NOS ZERO ()
+             ADD customer_id NOS ZERO ()
+             ADD order_status NOS ZERO ()
+             ADD order_date NOS ZERO ()
+             ADD required_date NOS ZERO ()
+             ADD shipped_date NOS ZERO ()
+             ADD store_id NOS ZERO ()
+             ADD staff_id NOS ZERO ()
+        )
+        OUTPUTLIST (customer_id, order_date, order_id, order_status, required_date, shipped_date, staff_id, store_id
+        )
+        WRAPPER (df ds_orders)
+    );
+
+CREATE OR REPLACE TABLE bv_products I18N us_pst (
+        product_id:int,
+        product_name:text,
+        brand_id:int,
+        category_id:int,
+        model_year:int,
+        list_price:double
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_products(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD product_id NOS ZERO ()
+             ADD product_name NOS ZERO ()
+             ADD brand_id NOS ZERO ()
+             ADD category_id NOS ZERO ()
+             ADD model_year NOS ZERO ()
+             ADD list_price NOS ZERO ()
+        )
+        OUTPUTLIST (brand_id, category_id, list_price, model_year, product_id, product_name
+        )
+        WRAPPER (df ds_products)
+    );
+
+CREATE OR REPLACE TABLE bv_staffs I18N us_pst (
+        staff_id:int,
+        first_name:text,
+        last_name:text,
+        email:text,
+        phone:text,
+        active:int,
+        store_id:int,
+        manager_id:int
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_staffs(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD staff_id NOS ZERO ()
+             ADD first_name NOS ZERO ()
+             ADD last_name NOS ZERO ()
+             ADD email NOS ZERO ()
+             ADD phone NOS ZERO ()
+             ADD active NOS ZERO ()
+             ADD store_id NOS ZERO ()
+             ADD manager_id NOS ZERO ()
+        )
+        OUTPUTLIST (active, email, first_name, last_name, manager_id, phone, staff_id, store_id
+        )
+        WRAPPER (df ds_staffs)
+    );
+
+CREATE OR REPLACE TABLE bv_stocks I18N us_pst (
+        store_id:int,
+        product_id:int,
+        quantity:int
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_stocks(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD store_id NOS ZERO ()
+             ADD product_id NOS ZERO ()
+             ADD quantity NOS ZERO ()
+        )
+        OUTPUTLIST (product_id, quantity, store_id
+        )
+        WRAPPER (df ds_stocks)
+    );
+
+CREATE OR REPLACE TABLE bv_stores I18N us_pst (
+        store_id:int,
+        store_name:text,
+        phone:text,
+        email:text,
+        street:text,
+        city:text,
+        state:text,
+        zip_code:text
+    )
+    FOLDER = '/02_base_views'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD ds_stores(
+        I18N us_pst
+        CONSTRAINTS (
+             ADD store_id NOS ZERO ()
+             ADD store_name NOS ZERO ()
+             ADD phone NOS ZERO ()
+             ADD email NOS ZERO ()
+             ADD street NOS ZERO ()
+             ADD city NOS ZERO ()
+             ADD state NOS ZERO ()
+             ADD zip_code NOS ZERO ()
+        )
+        OUTPUTLIST (city, email, phone, state, store_id, store_name, street, zip_code
+        )
+        WRAPPER (df ds_stores)
+    );
+
+# #######################################
+# VIEWS
+# #######################################
+CREATE OR REPLACE VIEW iv_inventory_status FOLDER = '/03_integrated_view' AS SELECT bv_stocks.store_id AS store_id, bv_stocks.product_id AS product_id, bv_stocks.quantity AS quantity, bv_stores.store_name AS store_name, bv_stores.phone AS phone, bv_stores.email AS email, bv_stores.street AS street, bv_stores.city AS city, bv_stores.state AS state, bv_stores.zip_code AS zip_code, bv_products.product_name AS product_name, bv_products.brand_id AS brand_id, bv_products.category_id AS category_id, bv_products.model_year AS model_year, bv_products.list_price AS list_price, (bv_stocks.quantity*bv_products.list_price) AS stock_value, case WHEN (bv_stocks.quantity = 0) THEN 'OUT OF STOCK' WHEN (bv_stocks.quantity < 5) THEN 'CRITICAL LOW' WHEN (bv_stocks.quantity >= 25) THEN 'OVERSTOCK' ELSE 'HEALTHY' END AS stock_status FROM (bv_stocks AS bv_stocks INNER JOIN bv_stores AS bv_stores ON bv_stocks.store_id = bv_stores.store_id ) INNER JOIN bv_products AS bv_products ON bv_stocks.product_id = bv_products.product_id ;
+
+ALTER VIEW iv_inventory_status
+ LAYOUT (bv_stocks = [215, 125, 200, 200], bv_stores = [632, 125, 200, 200], bv_products = [630, 233, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_sales_enriched FOLDER = '/03_integrated_view' AS SELECT bv_orders.order_id AS order_id, bv_orders.customer_id AS customer_id, bv_orders.order_status AS order_status, bv_orders.order_date AS order_date, bv_orders.required_date AS required_date, bv_orders.shipped_date AS shipped_date, bv_orders.store_id AS store_id, bv_orders.staff_id AS staff_id, bv_order_items.item_id AS item_id, bv_order_items.product_id AS product_id, bv_order_items.quantity AS quantity, bv_order_items.discount AS discount, bv_products.product_name AS product_name, bv_products.brand_id AS brand_id, bv_products.category_id AS category_id, bv_products.model_year AS model_year, bv_products.list_price AS list_price, bv_brands.brand_name AS brand_name, bv_categories.category_name AS category_name, case WHEN (order_status = 1) THEN 'Pending' WHEN (order_status = 2) THEN 'Processing' WHEN (order_status = 3) THEN 'Rejected' WHEN (order_status = 4) THEN 'Completed' ELSE 'Unknown' END AS status_description FROM (((bv_orders AS bv_orders INNER JOIN bv_order_items AS bv_order_items ON bv_orders.order_id = bv_order_items.order_id ) INNER JOIN bv_products AS bv_products ON bv_order_items.product_id = bv_products.product_id ) INNER JOIN bv_brands AS bv_brands ON bv_products.brand_id = bv_brands.brand_id ) INNER JOIN bv_categories AS bv_categories ON bv_products.category_id = bv_categories.category_id ;
+
+ALTER VIEW iv_sales_enriched
+ LAYOUT (bv_orders = [147, 42, 200, 200], bv_order_items = [559, 44, 200, 200], bv_products = [940, 47, 200, 200], bv_brands = [948, 182, 200, 200], bv_categories = [640, 186, 200, 200]);
+
+CREATE OR REPLACE VIEW iv_sales_master FOLDER = '/03_integrated_view' AS SELECT iv_sales_enriched.order_id AS order_id, iv_sales_enriched.customer_id AS customer_id, iv_sales_enriched.order_status AS order_status, iv_sales_enriched.order_date AS order_date, iv_sales_enriched.required_date AS required_date, iv_sales_enriched.shipped_date AS shipped_date, iv_sales_enriched.store_id AS store_id, iv_sales_enriched.staff_id AS staff_id, iv_sales_enriched.item_id AS item_id, iv_sales_enriched.product_id AS product_id, iv_sales_enriched.quantity AS quantity, iv_sales_enriched.discount AS discount, iv_sales_enriched.product_name AS product_name, iv_sales_enriched.brand_id AS brand_id, iv_sales_enriched.category_id AS category_id, iv_sales_enriched.model_year AS model_year, iv_sales_enriched.list_price AS list_price, iv_sales_enriched.brand_name AS brand_name, iv_sales_enriched.category_name AS category_name, bv_customers.first_name AS first_name_customers, bv_customers.last_name AS last_name_customers, bv_customers.phone AS phone_customers, bv_customers.email AS email_customers, bv_customers.street AS street, bv_customers.city AS city, bv_customers.state AS state, bv_customers.zip_code AS zip_code, bv_staffs.first_name AS first_name_staffs, bv_staffs.last_name AS last_name_staff, bv_staffs.phone AS phone_staff, bv_staffs.active AS active, bv_staffs.manager_id AS manager_id, bv_staffs.email AS email_staffs, ((iv_sales_enriched.quantity*iv_sales_enriched.list_price)*(1-iv_sales_enriched.discount)) AS net_revenue, iv_sales_enriched.status_description AS status_description FROM (iv_sales_enriched AS iv_sales_enriched INNER JOIN bv_customers AS bv_customers ON iv_sales_enriched.customer_id = bv_customers.customer_id ) INNER JOIN bv_staffs AS bv_staffs ON iv_sales_enriched.staff_id = bv_staffs.staff_id ;
+
+ALTER VIEW iv_sales_master
+ LAYOUT (iv_sales_enriched = [230, 111, 200, 200], bv_customers = [680, 30, 200, 200], bv_staffs = [686, 159, 200, 200]);
+
+CREATE OR REPLACE VIEW rv_regional_supply_chain FOLDER = '/04_finalize_view' AS SELECT iv_sales_master.status_description AS status_description, iv_sales_master.quantity AS sale_quantity, iv_inventory_status.stock_value AS stock_value, iv_inventory_status.store_name AS store_name, iv_inventory_status.state AS store_state, iv_sales_master.model_year AS model_year, iv_sales_master.brand_name AS brand_name, iv_sales_master.category_name AS category_name, iv_sales_master.product_name AS product_name, iv_sales_master.city AS customers_city, iv_sales_master.zip_code AS customers_zip_code, iv_sales_master.list_price AS list_price, iv_inventory_status.quantity AS stock_quantity, iv_inventory_status.stock_status AS stock_status, iv_sales_master.discount AS discount, iv_sales_master.net_revenue AS net_revenue, iv_sales_master.order_date AS order_date, iv_sales_master.required_date AS required_date, iv_sales_master.shipped_date AS shipped_date, iv_sales_master.first_name_staffs AS first_name_staffs, iv_sales_master.last_name_staff AS last_name_staff, iv_sales_master.product_id AS product_id, iv_sales_master.store_id AS store_id FROM iv_sales_master AS iv_sales_master INNER JOIN iv_inventory_status AS iv_inventory_status ON (iv_sales_master.product_id = iv_inventory_status.product_id AND iv_sales_master.store_id = iv_inventory_status.store_id)  GROUP BY iv_sales_master.order_status, iv_inventory_status.quantity, iv_sales_master.quantity, iv_inventory_status.store_name, iv_sales_master.model_year, iv_sales_master.brand_name, iv_sales_master.category_name, iv_sales_master.city, iv_sales_master.state, iv_sales_master.zip_code, iv_sales_master.list_price, iv_sales_master.discount, iv_sales_master.net_revenue, iv_sales_master.order_date, iv_sales_master.required_date, iv_sales_master.shipped_date, iv_sales_master.first_name_staffs, iv_sales_master.last_name_staff, iv_sales_master.product_id, iv_sales_master.store_id, iv_inventory_status.stock_value, iv_inventory_status.stock_status, iv_sales_master.status_description, iv_inventory_status.state, iv_sales_master.product_name;
+
+ALTER VIEW rv_regional_supply_chain
+ LAYOUT (iv_sales_master = [212, 100, 200, 200], iv_inventory_status = [687, 101, 200, 200]);
+
+# #######################################
+# ASSOCIATIONS
+# #######################################
+# No associations
+# #######################################
+# WEBSERVICES
+# #######################################
+CREATE OR REPLACE REST WEBSERVICE ws_regional_supply_chain
+    CONNECTION (
+        CHUNKSIZE = 1000
+        CHUNKTIMEOUT = 1000
+        QUERYTIMEOUT = 900000
+        POOLENABLED = true
+        POOLINITSIZE = 0
+        POOLMAXACTIVE = 30
+    )
+    DEFAULTREPRESENTATION = HTML
+    SUPPORTEDREPRESENTATIONS (HTML, XML, JSON)    AUTHENTICATION (BASIC VDP )
+
+    RESOURCES (
+        VIEW rv_regional_supply_chain FIELDS (
+            status_description : 'text', 
+            sale_quantity : 'int', 
+            stock_value : 'double', 
+            store_name : 'text', 
+            store_state : 'text', 
+            model_year : 'int', 
+            brand_name : 'text', 
+            category_name : 'text', 
+            product_name : 'text', 
+            customers_city : 'text', 
+            customers_zip_code : 'text', 
+            list_price : 'double', 
+            stock_quantity : 'int', 
+            stock_status : 'text', 
+            discount : 'double', 
+            net_revenue : 'double', 
+            order_date : 'localdate', 
+            required_date : 'localdate', 
+            shipped_date : 'localdate', 
+            first_name_staffs : 'text', 
+            last_name_staff : 'text', 
+            product_id : 'int', 
+            store_id : 'int'
+        )
+    )
+    OPTIONS ( NULLVALUESASEMPTYXMLELEMENTS = false
+        ALLOW_CORS_ORIGINS (*) DISABLED
+        PROCESS_FUNCTIONS_IN_SELECT_PARAMETER = true ) 
+    OPENAPI2 ( API_VERSION = '1.0.0' ) 
+    FOLDER = '/05_web_services';
+
+# #######################################
+# WEBCONTAINER WEB SERVICE DEPLOYMENTS
+# #######################################
+UNDEPLOY IF EXISTS WEBSERVICE ws_regional_supply_chain;
+
+DEPLOY WEBSERVICE ws_regional_supply_chain;
+
+# #######################################
+# Closing connection with database dvrt_asg_jaydentee
+# #######################################
+CLOSE;
+
